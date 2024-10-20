@@ -10,8 +10,8 @@ class PetsProvider extends ChangeNotifier {
         age: 2,
         gender: "male")
   ];
-
-  void getPets() async {
+//Assign the future property to the getPets function we created.
+  Future<void> getPets() async {
     pets = await DioClient().getPets();
     notifyListeners();
   }

@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    List<Pet> pets = Provider.of<PetsProvider>(context).pets;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pet Adopt"),
@@ -34,16 +33,42 @@ class HomePage extends StatelessWidget {
               },
               child: const Text("GET"),
             ),
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height),
-                ),
-                physics: const NeverScrollableScrollPhysics(), // <- Here
-                itemCount: pets.length,
-                itemBuilder: (context, index) => PetCard(pet: pets[index])),
+            //Wrappping grid view builder with a FutureBuilder widget.
+            FutureBuilder<void>(
+                //Use the dataSnapshot argument to check if the data is still loading, and in this case,
+                // return a spinner. Or if there's an error, show the error in a Text widget.
+                future:
+                    Provider.of<PetsProvider>(context, listen: false).getPets(),
+                builder: (context, datasnapshot) {
+                  if (datasnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (datasnapshot.error != null) {
+                      return const Center(
+                        child: Text("An error occurred"),
+                      );
+                    } else {
+                      var pets = context.read<PetsProvider>().pets;
+                      return Consumer<PetsProvider>(
+                          builder: (context, provider, _) => GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio:
+                                    MediaQuery.of(context).size.width /
+                                        (MediaQuery.of(context).size.height),
+                              ),
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // <- Here
+                              itemCount: pets.length,
+                              itemBuilder: (context, index) =>
+                                  PetCard(pet: pets[index])));
+                    }
+                  }
+                }),
           ],
         ),
       ),
