@@ -49,7 +49,7 @@ class DioClient {
         ),
       });
       Response response =
-          await _dio.post('$_baseUrl/pets/${pet.id}', data: data);
+          await _dio.put(_baseUrl + '/pets/${pet.id}', data: data);
       retrievedPet = Pet.fromJson(response.data);
     } on DioException catch (error) {
       print("error");
