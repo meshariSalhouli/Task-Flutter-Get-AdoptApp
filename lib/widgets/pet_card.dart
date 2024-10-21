@@ -1,8 +1,6 @@
 import 'package:adopt_app/models/pet.dart';
-import 'package:adopt_app/providers/pets_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class PetCard extends StatelessWidget {
   final Pet pet;
@@ -37,7 +35,10 @@ class PetCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.edit)),
+                          onPressed: () {
+                            GoRouter.of(context).push('/update/${pet.id}');
+                          },
+                          icon: const Icon(Icons.edit)),
                       IconButton(
                           onPressed: () {},
                           icon: const Icon(

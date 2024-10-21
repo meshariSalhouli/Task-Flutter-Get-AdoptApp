@@ -1,4 +1,3 @@
-import 'package:adopt_app/models/pet.dart';
 import 'package:adopt_app/providers/pets_provider.dart';
 import 'package:adopt_app/widgets/pet_card.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,9 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(context).push('/add_pet_page');
+                },
                 child: const Padding(
                   padding: EdgeInsets.all(12.0),
                   child: Text("Add a new Pet"),
